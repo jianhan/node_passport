@@ -5,9 +5,14 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 
+/**
+ * App represent application class boot the api server.
+ *
+ * @export
+ * @class App
+ */
 export default class App {
   private _express: express.Application;
-
   private _corsAllowedHeaders: string[];
   private _corsMethods: string[];
   private _corsOrigins: string[];
