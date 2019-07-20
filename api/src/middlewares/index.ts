@@ -1,1 +1,1 @@
-import { initMiddlewares, Middlewares } from "./Middlewares";
+export { initMiddlewares, Middlewares } from "./Middlewares";

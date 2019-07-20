@@ -1,5 +1,6 @@
 import express, { RequestHandler } from "express";
 import { Route } from "../routes/route";
+import { Logger } from "winston";
 
 export interface Application {
   setupMiddlewares(...handlers: RequestHandler[]): Application;
@@ -9,9 +10,11 @@ export interface Application {
 
 class ExpressApp implements Application {
   private _express: express.Application;
+  private _logger: Logger;
 
-  constructor() {
+  constructor(logger: Logger) {
     this._express = express();
+    this._logger = logger;
   }
 
   public express(): express.Application {
@@ -19,6 +22,7 @@ class ExpressApp implements Application {
   }
 
   public setupMiddlewares(...handlers: RequestHandler[]): ExpressApp {
+    this._logger.debug("initialize middleware");
     this._express.use(handlers);
     return this;
   }
@@ -33,4 +37,4 @@ class ExpressApp implements Application {
   }
 }
 
-export const newApplication = (): Application => new ExpressApp();
+export const newApplication = (logger: Logger): Application => new ExpressApp(logger);

@@ -1,12 +1,13 @@
 import dotenv from "dotenv";
-import http from "http";
-import { newApplication } from "./application/Application";
-import { initMiddlewares } from "./middlewares/Middlewares";
-import routes from "./routes";
-
 dotenv.config();
 
-const app = newApplication();
+import http from "http";
+import { newApplication } from "./application";
+import { logger } from "./logger";
+import { initMiddlewares } from "./middlewares";
+import routes from "./routes";
+
+const app = newApplication(logger);
 app.setupMiddlewares(...initMiddlewares().all()).setupRoutes(routes);
 
 const { PORT = 8008 } = process.env;
