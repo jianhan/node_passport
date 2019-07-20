@@ -4,7 +4,7 @@ import HttpClientError from "../errors/HttpClientError";
 import { logger } from "../logger/winston";
 
 export const notFoundError = () => {
-  throw new HTTP404Error("page not found");
+  throw new HTTP404Error("not found");
 };
 
 export const clientError = (err: Error, res: Response, next: NextFunction) => {
