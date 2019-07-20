@@ -12,7 +12,11 @@
                 "allow-leading-underscore",
                 "allow-pascal-case"
             ]
-        }
+        },
+        "interface-name": [
+            true,
+            "never-prefix"
+        ]
     },
     "rulesDirectory": []
 }
