@@ -6,7 +6,13 @@ const customFormat = printf(({ level, message, label, timestamp }) => {
 });
 
 export const logger = winston.createLogger({
-  format: combine(label({ label: process.env.NODE_ENV }), timestamp(), customFormat),
+  format: combine(
+    label({ label: process.env.NODE_ENV }),
+    timestamp(),
+    customFormat,
+    winston.format.splat(),
+    winston.format.simple(),
+  ),
   level: process.env.NODE_ENV === "production" ? "info" : "debug",
   transports: [
     new winston.transports.Console(),

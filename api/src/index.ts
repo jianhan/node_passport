@@ -14,5 +14,5 @@ const { PORT = 8008 } = process.env;
 const server = http.createServer(app.express());
 
 server.listen(PORT, () =>
-  console.log(`Server is running http://localhost:${PORT}...`),
+  logger.info(`Server is running http://localhost:%s`, PORT),
 );

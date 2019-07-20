@@ -1,12 +1,8 @@
-import { Request, Response } from "express";
+import { index } from "../handlers";
 import { Route } from "./route";
 
 export const indexRoute: Route = {
-    handler: (_: Request, res: Response) => {
-    res.status(200).send({
-      message: "GET request successfulll!!!!",
-    });
-  },
+  handler: index,
   method: "get",
   path: "/",
 };
