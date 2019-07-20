@@ -1,24 +1,10 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { HTTP404Error } from "../errors/Http404Error";
 import HttpClientError from "../errors/HttpClientError";
 import { logger } from "../logger/winston";
 
-export const index = (req: Request, res: Response) => {
-  logger.debug(req.body);
-  res.status(200).send({
-    message: "get request successfulll!!!!",
-  });
-};
-
-export const test = (req: Request, res: Response) => {
-  logger.debug(req.body);
-  res.status(200).send({
-    message: "test",
-  });
-};
-
-export const error404 = () => {
-  throw new HTTP404Error("Method not found.");
+export const notFoundError = () => {
+  throw new HTTP404Error("page not found");
 };
 
 export const clientError = (err: Error, res: Response, next: NextFunction) => {

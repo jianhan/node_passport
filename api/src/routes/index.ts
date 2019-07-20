@@ -1,3 +1,3 @@
-import { indexRoute } from "./api";
+import { indexRoute, testRoute } from "./api";
 
-export default [indexRoute];
+export default [indexRoute, testRoute];
