@@ -1,5 +1,5 @@
 import { Application } from "express";
 
-export default interface AppWrapper {
+export default interface Wrapper {
   wrap(app: Application): void;
 }

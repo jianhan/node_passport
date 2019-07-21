@@ -4,9 +4,10 @@ import cors from "cors";
 import { Application, RequestHandler } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-import AppWrapper from "../application/AppWrapper";
+import { Wrapper } from "../application";
+import { winstonMiddleware } from "../logger";
 
-export default class Default implements AppWrapper {
+export default class Default implements Wrapper {
   public wrap(app: Application): void {
     const defaultMiddlewares: RequestHandler[] = [
       morgan("combined"),
@@ -15,6 +16,7 @@ export default class Default implements AppWrapper {
       helmet(),
       bodyParser.json(),
       bodyParser.urlencoded({ extended: true }),
+      winstonMiddleware,
     ];
 
     defaultMiddlewares.forEach((h: RequestHandler) => {

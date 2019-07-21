@@ -1,4 +1,6 @@
+import expressWinston from "express-winston";
 import winston from "winston";
+
 const { combine, printf, label, timestamp } = winston.format;
 
 const customFormat = printf(({ level, message, label, timestamp }) => {
@@ -18,4 +20,16 @@ export const logger = winston.createLogger({
     new winston.transports.Console(),
     new winston.transports.File({ filename: "combined.log" }),
   ],
+});
+
+export const winstonMiddleware = expressWinston.logger({
+  colorize: false,
+  expressFormat: true,
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.json(),
+  ),
+  meta: true,
+  msg: "HTTP {{req.method}} {{req.url}}",
+  transports: [new winston.transports.Console()],
 });

@@ -1,1 +1,1 @@
-export { logger } from "./winston";
+export { logger, winstonMiddleware } from "./winston";
