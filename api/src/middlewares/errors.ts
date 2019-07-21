@@ -1,24 +1,21 @@
-import { NextFunction, Request, Response } from "express";
-import * as errorHandlers from "../handlers/errors";
-import { logger } from "../logger/winston";
+import { Application, NextFunction, Request, Response } from "express";
+import AppWrapper from "../application/AppWrapper";
 
-const handle404Error = () => {
-  errorHandlers.notFoundError();
+const handler404 = (req: Request, res: Response, next: NextFunction) => {
+  return res.status(404).send({ message: "Route" + req.url + " Not found." });
 };
 
-const handleClientError = (
+const handler500 = (
   err: Error,
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  logger.debug(req.body);
-  errorHandlers.clientError(err, res, next);
+  return res.status(500).send({ error: err });
 };
 
-const handleServerError = (err: Error, req: Request, res: Response) => {
-  logger.debug(req.body);
-  errorHandlers.serverError(err, res);
-};
-
-export default [handle404Error, handleClientError, handleServerError];
+export default class Errors implements AppWrapper {
+  public wrap(app: Application): void {
+    app.use([handler404, handler500]);
+  }
+}

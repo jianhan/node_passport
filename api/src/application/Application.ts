@@ -1,13 +1,12 @@
-import express, { RequestHandler } from "express";
-import { RequestHandlerParams } from "express-serve-static-core";
+import express from "express";
+import mongoose from "mongoose";
 import { Logger } from "winston";
-import { Route } from "../routes/route";
+import { MONGO_DB, MONGO_HOST, MONGO_PORT } from "../configs";
+import AppWrapper from "./AppWrapper";
 
 export interface Application {
-  setupMiddlewares(...handlers: RequestHandler[]): Application;
-  setupRoutes(routes: Route[]): Application;
   express(): express.Application;
-  addMiddlewares(...handlers: RequestHandlerParams[]): Application;
+  applyWrappers(...wrappers: AppWrapper[]): Application;
 }
 
 class ExpressApp implements Application {
@@ -17,31 +16,24 @@ class ExpressApp implements Application {
   constructor(logger: Logger) {
     this._express = express();
     this._logger = logger;
+    this.initMongo();
   }
 
   public express(): express.Application {
     return this._express;
   }
 
-  public setupMiddlewares(...handlers: RequestHandler[]): ExpressApp {
-    this._logger.debug("initialize middleware");
-    this._express.use(handlers);
+  public applyWrappers(...wrappers: AppWrapper[]): Application {
+    this._logger.debug("wrappers applied");
+    wrappers.forEach((w: AppWrapper) => w.wrap(this._express));
     return this;
   }
 
-  public setupRoutes(routes: Route[]): ExpressApp {
-    for (const route of routes) {
-      const { method, path, handler } = route;
-      (this._express.route as any)(path)[method](handler);
-    }
-
-    return this;
-  }
-
-  public addMiddlewares(...handlers: RequestHandlerParams[]): Application {
-    this._logger.debug("adding middlewares");
-    this._express.use(...handlers);
-    return this;
+  private initMongo(): void {
+    mongoose.connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`, {
+      useNewUrlParser: true,
+    });
+    mongoose.Promise = global.Promise;
   }
 }
 

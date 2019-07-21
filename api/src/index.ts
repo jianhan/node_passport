@@ -5,15 +5,10 @@ import http from "http";
 import { newApplication } from "./application";
 import { PORT } from "./configs";
 import { logger } from "./logger";
-import { initMiddlewares } from "./middlewares";
-import errorHandlers from "./middlewares/errors";
-import routes from "./routes";
+import middlewares from "./middlewares";
 
 const app = newApplication(logger);
-app
-  .setupMiddlewares(...initMiddlewares().all())
-  .setupRoutes(routes)
-  .addMiddlewares(errorHandlers);
+app.applyWrappers(...middlewares);
 
 const server = http.createServer(app.express());
 
