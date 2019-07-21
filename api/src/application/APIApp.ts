@@ -27,9 +27,14 @@ class APIApp implements Application {
 
   private initMongo(): void {
     mongoose.Promise = global.Promise;
-    mongoose.connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`, {
-      useNewUrlParser: true,
-    });
+    mongoose
+      .connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`, {
+        useNewUrlParser: true,
+      })
+      .catch((err) => {
+        this._logger.error(err);
+        process.exit(1);
+      });
   }
 }
 
