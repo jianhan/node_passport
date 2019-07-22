@@ -1,6 +1,18 @@
 import bcrypt from "bcrypt-nodejs";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import uniqueValidator from "mongoose-unique-validator";
+import validator from "validator";
+import { JWT_SECRET } from "../configs";
+
+// export const passwordReg = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+
+export interface AuthJSON {
+  _id: string;
+  email: string;
+  token: string;
+}
 
 export interface UserDocument extends mongoose.Document {
   email: string;
@@ -20,6 +32,8 @@ export interface UserDocument extends mongoose.Document {
   };
 
   comparePassword: comparePasswordFunction;
+  createToken: () => string;
+  toAuthJSON: () => AuthJSON;
   gravatar: (size: number) => string;
 }
 
@@ -37,12 +51,26 @@ const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: true,
       unique: true,
+      required: [true, "Email is required!"],
+      trim: true,
+      index: true,
+      validate: {
+        validator(email: string) {
+          return validator.isEmail(email);
+        },
+      },
     },
     password: {
       type: String,
-      required: true,
+      required: [true, "Password is required!"],
+      trim: true,
+      minlength: [6, "Password need to be longer!"],
+      // validate: {
+      //   validator(password: string) {
+      //     return passwordReg.test(password);
+      //   },
+      // },
     },
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -63,10 +91,11 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-/**
- * Password hash middleware.
- */
-userSchema.pre("save", function save(next) {
+userSchema.plugin(uniqueValidator, {
+  message: "{VALUE} already taken!",
+});
+
+userSchema.pre("save", function save(next: any) {
   const user = this as UserDocument;
   if (!user.isModified("password")) {
     return next();
@@ -102,8 +131,24 @@ const comparePassword: comparePasswordFunction = function(
     },
   );
 };
-
 userSchema.methods.comparePassword = comparePassword;
+
+userSchema.methods.createToken = function() {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    JWT_SECRET,
+  );
+};
+
+userSchema.methods.toAuthJSON = function(): AuthJSON {
+  return {
+    _id: this._id,
+    email: this.email,
+    token: this.createToken(),
+  };
+};
 
 /**
  * Helper method for getting user's gravatar.

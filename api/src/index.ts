@@ -5,15 +5,14 @@ import http from "http";
 import { newApplication } from "./application";
 import { PORT } from "./configs";
 import { logger } from "./logger";
-import middlewares from "./middlewares";
-import Errors from "./middlewares/Errors";
+import { defaultWrappers, errorWrappers } from "./middlewares";
 import Handler from "./user/Handler";
 
 const app = newApplication(logger);
 app
-  .applyWrappers(...middlewares)
+  .applyWrappers(defaultWrappers)
   .applyWrappers(new Handler())
-  .applyWrappers(new Errors());
+  .applyWrappers(errorWrappers);
 
 const server = http.createServer(app.express());
 

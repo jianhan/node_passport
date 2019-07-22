@@ -1,5 +1,7 @@
 import Default from "./Default";
+import Errors from "./Errors";
 
-const defaultWrapper = new Default();
+const defaultWrappers = new Default();
+const errorWrappers = new Errors();
 
-export default [defaultWrapper];
+export { defaultWrappers, errorWrappers };

@@ -36,7 +36,7 @@ passport.use(localStrategy);
 
 // chwck jwt strategy
 const jwtOpts = {
-  jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeader(),
+  jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: JWT_SECRET,
 };
 const jwtStrategy = new JWTStrategy(jwtOpts, (payload, done) => {
