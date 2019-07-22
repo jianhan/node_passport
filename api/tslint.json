@@ -1,22 +1,18 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "variable-name": {
-            "options": [
-                "ban-keywords",
-                "check-format",
-                "allow-leading-underscore",
-                "allow-pascal-case"
-            ]
-        },
-        "interface-name": [
-            true,
-            "never-prefix"
-        ]
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "check-format",
+        "allow-leading-underscore",
+        "allow-pascal-case"
+      ]
     },
-    "rulesDirectory": []
+    "interface-name": [true, "never-prefix"],
+    "object-literal-sort-keys": false
+  },
+  "rulesDirectory": []
 }
