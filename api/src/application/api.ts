@@ -5,7 +5,7 @@ import { MONGO_DB, MONGO_HOST, MONGO_PORT } from "../configs";
 import Application from "./Application";
 import Wrapper from "./Wrapper";
 
-class APIApp implements Application {
+class API implements Application {
   private _express: express.Application;
   private _logger: Logger;
 
@@ -38,4 +38,4 @@ class APIApp implements Application {
   }
 }
 
-export default (logger: Logger): Application => new APIApp(logger);
+export default (logger: Logger): Application => new API(logger);

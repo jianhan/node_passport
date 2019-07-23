@@ -1,8 +1,8 @@
-import passport from "passport";
+import passport, { Strategy } from "passport";
 import passportJWT from "passport-jwt";
 import passportLocal from "passport-local";
 import { JWT_SECRET } from "../configs";
-import { User } from "../user/Model";
+import { User } from "../user/model";
 
 const LocalStrategy = passportLocal.Strategy;
 const JWTStrategy = passportJWT.Strategy;

@@ -16,6 +16,11 @@ services:
     image: mongo:latest
     ports:
       - "27017:27017"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db 
 
   mongoclient:
     image: mongoclient/mongoclient:latest
@@ -25,3 +30,6 @@ services:
       - mongo
     ports:
       - 3300:3000
+
+volumes:
+  mongo:
